@@ -1,8 +1,7 @@
 ---
-title: Converting .org file links to .html links when compiling Org
+title: Hakyll - Converting file links to .html links when compiling
 date: 2021-03-14
 ---
-
 In the knowledge base I am creating (a collection of articles and
 thoughts that have helped me) I have links to other Org files to avoid
 clutter and keep these pages loading fast. Suppose we have the
@@ -33,17 +32,17 @@ Pandoc compiler in my site.hs.
 [[https://github.com/jrciii/site-generator/blob/c414c069a11e25f2f3b6a0004beb6b8f7cc0597c/site.hs#L29][Here is where the compiler is used on the knowledge base]]
 
 This compiler is also used in other places in site.hs, namely where blog posts
-are compiled. When writing the previous blog post, I linked to this
-blog post as an org file, then followed it to create this post. The
-compiler turns it into an .html link.
+are compiled. When writing the previous blog post,
+[[https://github.com/jrciii/site-generator/blame/master/posts/2021-03-14-makingjrciiicom.org#L38][I linked to this blog post as an org file, then followed it to create
+this post.]] The compiler turns it into an .html link.
 
-Here's how the compiler works
+* How the compiler works
 
 It's fairly simple. Even being extremely out of practice with Haskell,
 I was able to whip this up.
 
-Create the compiler with pandocCompilerWithTransform with some default
-options and a Pandoc -> Pandoc function.
+** Create the compiler with pandocCompilerWithTransform
+Supply some default options and a Pandoc -> Pandoc function.
 #+BEGIN_SRC haskell
 pandocPostCompiler :: Compiler (Item String)
 pandocPostCompiler = pandocCompilerWithTransform
@@ -52,6 +51,7 @@ pandocPostCompiler = pandocCompilerWithTransform
     orgToHtml
 #+END_SRC
 
+** Walk the Pandoc AST
 To parse the AST (Abstract Syntax Tree) or the initial compiler
 results, the `walk` function is used. This allows us to follow the
 structure until Links are found and modify the text directly.
@@ -62,6 +62,7 @@ orgToHtml = walk $ \inline -> case inline of
   _ -> inline
 #+END_SRC
 
+** Apply the substitution on link targets
 This is the substitution code. It's matching on any string that ends
 with .org and capturing what comes before .org, and then replacing it
 with that capture group with .html appended.
@@ -70,8 +71,9 @@ orgRegex :: String -> String
 orgRegex t = subRegex (mkRegex "^(.*?)\\.org$") t "\\1.html"
 #+END_SRC
 
+* Done!
 I have a feeling I am going to be doing more things like this as the
 site and my Org knowledge expand, but I think I will be ready!
 
-Credits:
+* Credits
 [[https://enter-haken.github.io/posts/2017-02-20-pandoc-filter.html][I modeled my approach after this post]]
