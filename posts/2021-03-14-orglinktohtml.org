@@ -1,0 +1,20 @@
+---
+title: Converting .org file links to .html links when compiling Org
+date: 2021-03-14
+---
+
+In the knowledge base I am creating (a collection of articles and
+thoughts that have helped me) I have links to other Org files to avoid
+clutter and keep these pages loading fast. Suppose we have the
+following link in an Org file
+
+#+BEGIN_SRC org
+* [[file:Python.org][Python]]
+#+END_SRC
+
+By default when this is compiled by Pandoc to html, it will remain as
+a link to the org file
+
+#+BEGIN_SRC html
+<a href="Python.org">Python</a>
+#+END_SRC 

@@ -20,7 +20,7 @@ main = hakyll $ do
 
     match (fromList ["about.org", "ticklers.org", "contact.org"]) $ do
         route   $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ pandocPostCompiler
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
@@ -32,7 +32,7 @@ main = hakyll $ do
 
     match "posts/*.org" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ pandocPostCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
