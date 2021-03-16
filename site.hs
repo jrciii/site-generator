@@ -81,7 +81,7 @@ pandocPostCompiler = pandocCompilerWithTransform
     orgToHtml
 
 orgRegex :: String -> String
-orgRegex t = subRegex (mkRegex "^(.*?)\\.org$") t "\\1.html"
+orgRegex t = subRegex (mkRegex "^file:(.*?)\\.org$") t "\\1.html"
 
 orgToHtml :: Pandoc -> Pandoc
 orgToHtml = walk $ \inline -> case inline of
