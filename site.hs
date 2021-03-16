@@ -80,9 +80,12 @@ pandocPostCompiler = pandocCompilerWithTransform
     defaultHakyllWriterOptions
     orgToHtml
 
+-- Probably need to make this more robust.
 orgRegex :: String -> String
-orgRegex t = subRegex (mkRegex "^file:(.*?)\\.org$") t "\\1.html"
-
+orgRegex t = if "http" `isPrefixOf` (pack t)
+  then t
+  else subRegex (mkRegex "^(.*?)\\.org$") t "\\1.html"
+  
 orgToHtml :: Pandoc -> Pandoc
 orgToHtml = walk $ \inline -> case inline of
   Link attr inline (url, title) -> Link attr inline (pack(orgRegex (unpack url)), title)
